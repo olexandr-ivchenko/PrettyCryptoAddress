@@ -20,25 +20,31 @@ public class ThreadExecutor implements Runnable {
     private List<AddressChecker> addressCheckers;
     private Supplier<Job> jobSupplier;
     private BiConsumer<BigInteger, AddressGenerator> resultConsumer;
+    private Consumer<Double> performanceReportConsumer;
 
     public ThreadExecutor(List<AddressGenerator> addressGenerators,
                           List<AddressChecker> addressCheckers,
                           Supplier<Job> jobSupplier,
-                          BiConsumer<BigInteger, AddressGenerator> resultConsumer) {
+                          BiConsumer<BigInteger, AddressGenerator> resultConsumer,
+                          Consumer<Double> performanceReportConsumer) {
         this.addressGenerators = addressGenerators;
         this.addressCheckers = addressCheckers;
         this.jobSupplier = jobSupplier;
         this.resultConsumer = resultConsumer;
+        this.performanceReportConsumer = performanceReportConsumer;
     }
 
     @Override
     public void run() {
         Job job = null;
         while((job = jobSupplier.get()) != null){
+            long jobStart = System.currentTimeMillis();
             for(long i=0; i<job.getSize(); i++) {
                 BigInteger privateKey = job.getStartPoint().add(BigInteger.valueOf(i));
                 generateAddressesAndCheckMatch(privateKey);
             }
+            double speed = job.getSize()*1000d/(System.currentTimeMillis()-jobStart);
+            performanceReportConsumer.accept(speed);
         }
     }
 

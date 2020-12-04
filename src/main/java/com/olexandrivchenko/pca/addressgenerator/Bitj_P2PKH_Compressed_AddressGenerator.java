@@ -8,6 +8,16 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigInteger;
 
+/**
+ * Please note - due to nature of address generation, 1st char is not linearly distributed
+ * [2-9][A-P] - 4.4% each
+ * [Q] - 1.5%
+ * [1] - 0.4%
+ * [R-Za-z] - 0.07% each
+ * There is also a small difference in 2nd char probability, but that is inside of 0.1%
+ * [2-9A-K] - 1.8%
+ * others - 1.7%
+ */
 @Component
 public class Bitj_P2PKH_Compressed_AddressGenerator implements AddressGenerator {
 
@@ -37,7 +47,7 @@ public class Bitj_P2PKH_Compressed_AddressGenerator implements AddressGenerator 
 
     @Override
     public String getPrivateKey(BigInteger privateKey) {
-        //TODO: just a stub - rewrite
-        return privateKey.toString();
+        ECKey key = ECKey.fromPrivate(privateKey, true);
+        return key.getPrivateKeyAsWiF(MainNetParams.get());
     }
 }
