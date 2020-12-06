@@ -4,7 +4,7 @@ import com.olexandrivchenko.pca.addressgenerator.AddressGenerator;
 import com.olexandrivchenko.pca.checker.AddressChecker;
 import com.olexandrivchenko.pca.comandline.ArgumentsParser;
 import com.olexandrivchenko.pca.comandline.Help;
-import com.olexandrivchenko.pca.controller.MainBruteForceExecutor;
+import com.olexandrivchenko.pca.controller.RuntimeController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -20,7 +20,7 @@ public class PrettyCryptoAddressApplication implements CommandLineRunner {
 	Help help;
 
 	@Autowired
-	MainBruteForceExecutor executor;
+	RuntimeController runtimeController;
 
 	@Autowired
 	ArgumentsParser argParser;
@@ -37,9 +37,9 @@ public class PrettyCryptoAddressApplication implements CommandLineRunner {
 
 		//launch calculation
 		List<AddressChecker> addressCheckers = argParser.getEffectiveCheckers();
-		List<AddressGenerator> addressGenerators = argParser.getEffectiveGenerators();
+		AddressGenerator addressGenerators = argParser.getEffectiveGenerator();
 		int threadCount = 16;
 		BigInteger startPoint = new BigInteger(argParser.getStartPoint());
-		executor.startThreads(startPoint, threadCount, addressGenerators, addressCheckers);
+		runtimeController.startThreads(startPoint, threadCount, addressGenerators, addressCheckers);
 	}
 }

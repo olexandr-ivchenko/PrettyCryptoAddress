@@ -20,7 +20,7 @@ public class ArgumentsParser {
     @Autowired
     private List<? extends AddressChecker> fullCheckerList;
 
-    private List<AddressGenerator> effectiveGenerators = new ArrayList<>();
+    private AddressGenerator effectiveGenerator;
     private List<AddressChecker> effectiveCheckers = new ArrayList<>();
 
     private String startPoint;
@@ -40,7 +40,10 @@ public class ArgumentsParser {
             }
             AddressGenerator generatorForParameter = getGeneratorForParameter(arg);
             if (generatorForParameter != null) {
-                effectiveGenerators.add(generatorForParameter);
+                if(effectiveGenerator != null){
+                    throw new RuntimeException(String.format("Only one generator can be configured! Found at least 2: %s and %s", effectiveGenerator.getCommandKey(), generatorForParameter.getCommandKey()));
+                }
+                effectiveGenerator = generatorForParameter;
                 continue;
             }
             AddressChecker checkerForParameter = getCheckerForParameter(arg);
@@ -48,7 +51,7 @@ public class ArgumentsParser {
                 effectiveCheckers.add(checkerForParameter);
                 continue;
             }
-            //throw something
+            throw new RuntimeException("Unknown parameter: " + arg);
         }
         return true;
     }
@@ -125,8 +128,8 @@ public class ArgumentsParser {
         return false;
     }
 
-    public List<AddressGenerator> getEffectiveGenerators() {
-        return effectiveGenerators;
+    public AddressGenerator getEffectiveGenerator() {
+        return effectiveGenerator;
     }
 
     public List<AddressChecker> getEffectiveCheckers() {
