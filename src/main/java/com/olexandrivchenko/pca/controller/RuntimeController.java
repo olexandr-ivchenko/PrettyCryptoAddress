@@ -53,7 +53,7 @@ public class RuntimeController {
             log.info("Total hashrate is: {}kH/s over {} threads. Last executed jobs hashrate is: {}kH/s Already processed {}G",
                     String.format("%.2f", hashRate),
                     executor.getThreadCount(),
-                    String.format("%.2f", threadPerformanceMap.values().stream().mapToDouble(o -> o).sum()),
+                    String.format("%.2f", (threadPerformanceMap.values().stream().mapToDouble(o -> o).sum())/1000),
                     String.format("%.3f", (executor.getCurrentPoint().subtract(executor.getStartPoint()).doubleValue()/1000000000)));
             String header = "";
             String values = "";
