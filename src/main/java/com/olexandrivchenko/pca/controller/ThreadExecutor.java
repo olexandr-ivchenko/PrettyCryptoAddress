@@ -47,7 +47,7 @@ public class ThreadExecutor implements Runnable {
         while ((job = jobSupplier.get()) != null) {
             long jobStart = System.currentTimeMillis();
             for (long i = 0; i < job.getSize(); i++) {
-                BigInteger privateKey = job.getStartPoint().add(BigInteger.ONE);
+                BigInteger privateKey = job.getStartPoint().add(BigInteger.valueOf(i));
                 generateAddressesAndCheckMatch(privateKey);
             }
             double speed = job.getSize() * 1000d / (System.currentTimeMillis() - jobStart);

@@ -2,9 +2,11 @@ package com.olexandrivchenko.pca.comandline;
 
 import com.olexandrivchenko.pca.addressgenerator.AddressGenerator;
 import com.olexandrivchenko.pca.checker.AddressChecker;
+import org.bitcoinj.core.Base58;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +25,7 @@ public class ArgumentsParser {
     private AddressGenerator effectiveGenerator;
     private List<AddressChecker> effectiveCheckers = new ArrayList<>();
 
-    private String startPoint;
+    private BigInteger startPoint;
 
     /**
      * @param args
@@ -56,6 +58,10 @@ public class ArgumentsParser {
         return true;
     }
 
+    private void printStartParametersInfo(){
+        //TODO
+    }
+
     /**
      *
      * @param arg
@@ -68,11 +74,15 @@ public class ArgumentsParser {
             } else if (startPoint != null) {
                 //start point is set - throw something
             } else {
-                startPoint = arg.get(1);
+                startPoint = parsePrivateKey(arg.get(1));
                 return true;
             }
         }
         return false;
+    }
+
+    private BigInteger parsePrivateKey(String s) {
+        return Base58.decodeToBigInteger(s);
     }
 
     private List<List<String>> groupParams(String[] args) {
@@ -136,7 +146,7 @@ public class ArgumentsParser {
         return effectiveCheckers;
     }
 
-    public String getStartPoint() {
+    public BigInteger getStartPoint() {
         return startPoint;
     }
 }

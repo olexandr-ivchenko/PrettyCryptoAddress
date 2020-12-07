@@ -39,7 +39,7 @@ public class PrettyCryptoAddressApplication implements CommandLineRunner {
 		List<AddressChecker> addressCheckers = argParser.getEffectiveCheckers();
 		AddressGenerator addressGenerators = argParser.getEffectiveGenerator();
 		int threadCount = 16;
-		BigInteger startPoint = new BigInteger(argParser.getStartPoint());
+		BigInteger startPoint = argParser.getStartPoint();
 		runtimeController.startThreads(startPoint, threadCount, addressGenerators, addressCheckers);
 	}
 }

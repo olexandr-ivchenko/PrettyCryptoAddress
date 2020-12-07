@@ -21,16 +21,17 @@ public class StartsWithAddressChecker implements AddressChecker {
         }
         StartsWithAddressChecker checker = new StartsWithAddressChecker();
         checker.startString = args.get(0);
-        firstChar = checker.startString.charAt(0);
-        secondChar = checker.startString.charAt(1);
+        checker.firstChar = checker.startString.charAt(0);
+        checker.secondChar = checker.startString.charAt(1);
         return checker;
     }
 
     @Override
     public boolean checkAddress(String address) {
-        return address.charAt(0) == firstChar
-                && address.charAt(1) == secondChar
-                && address.startsWith(startString);
+//        return address.charAt(0) == firstChar
+//                && address.charAt(1) == secondChar
+//                && address.startsWith(startString);
+        return address.startsWith(startString);
     }
 
     @Override

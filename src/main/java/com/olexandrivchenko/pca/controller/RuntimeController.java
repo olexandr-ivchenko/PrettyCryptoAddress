@@ -50,9 +50,11 @@ public class RuntimeController {
                     .subtract(executor.getStartPoint())
                     .subtract(JOB_SIZE.multiply(BigInteger.valueOf(executor.getThreadCount() / 2))).doubleValue()
                     / (executor.getLastJobRequestTime() - executorStartTime);
-            log.info("Total hashrate is: {}kH/s over {} threads",
+            log.info("Total hashrate is: {}kH/s over {} threads. Last executed jobs hashrate is: {}kH/s Already processed {}G",
                     String.format("%.2f", hashRate),
-                    executor.getThreadCount());
+                    executor.getThreadCount(),
+                    String.format("%.2f", threadPerformanceMap.values().stream().mapToDouble(o -> o).sum()),
+                    String.format("%.3f", (executor.getCurrentPoint().subtract(executor.getStartPoint()).doubleValue()/1000000000)));
             String header = "";
             String values = "";
             for (Map.Entry<String, Double> entry : threadPerformanceMap.entrySet()) {
